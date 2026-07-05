@@ -1,0 +1,31 @@
+name: Notify website
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "**/*.md"
+      - "**/*.png"
+      - "**/*.jpg"
+      - "**/*.jpeg"
+      - "**/*.gif"
+      - "**/*.webp"
+      - "**/*.svg"
+      - "!README.md"
+      - "!.github/**"
+  workflow_dispatch:
+
+jobs:
+  notify:
+    name: Trigger website rebuild
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Dispatch website build
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.WEBSITE_REBUILD_TOKEN }}
+          repository: ltyqa/MyWebsite
+          event-type: notes-updated
+          client-payload: '{"source":"MyNote"}'
