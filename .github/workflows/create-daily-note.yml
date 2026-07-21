@@ -1,0 +1,40 @@
+name: 创建每日日记
+
+on:
+  schedule:
+    # GitHub Actions 使用 UTC；18:00 对应北京时间次日 02:00。
+    - cron: "0 18 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: create-daily-note
+  cancel-in-progress: false
+
+jobs:
+  create-note:
+    name: 清理空日记并创建今日模板
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+
+      - name: 创建每日日记
+        run: bash scripts/create-daily-note.sh
+
+      - name: 提交变更
+        shell: bash
+        run: |
+          if [[ -z "$(git status --porcelain -- '日记/')" ]]; then
+            echo "没有需要提交的变更。"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- '日记/'
+          git commit -m "日记：更新 $(TZ=Asia/Shanghai date +%F) 每日模板"
+          git push

@@ -5,6 +5,7 @@
 # Local scripts and generated OCR artifacts
 *.py
 *.sh
+!scripts/create-daily-note.sh
 *.bat
 *.js
 *.zip
