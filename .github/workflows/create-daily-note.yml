@@ -2,8 +2,8 @@ name: 创建每日日记
 
 on:
   schedule:
-    # GitHub Actions 使用 UTC；16:05 对应北京时间次日 00:05。
-    - cron: "5 16 * * *"
+    # GitHub Actions 使用 UTC；18:00 对应北京时间次日 02:00。
+    - cron: "0 18 * * *"
   workflow_dispatch:
 
 permissions:
