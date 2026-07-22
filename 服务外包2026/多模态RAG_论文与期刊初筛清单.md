@@ -34,14 +34,14 @@
    - 链接：[PMLR 正式页面](https://proceedings.mlr.press/v202/radford23a.html)
 
 5. **Girdhar et al. (2023), ImageBind: One Embedding Space To Bind Them All. CVPR.**
-   - 用途：重点文献。展示文本、图像、音频等六种模态可映射到统一嵌入空间，直接对应项目的“图文音视频统一向量化”。
+   - 用途：重点文献。展示图像、文本、音频、深度、热成像和IMU六种模态可映射到统一嵌入空间。视频不是独立模态，项目中应将其拆为关键帧、音轨、转写和时间戳处理。
    - 链接：[CVPR Open Access](https://openaccess.thecvf.com/content/CVPR2023/html/Girdhar_ImageBind_One_Embedding_Space_To_Bind_Them_All_CVPR_2023_paper)
 
 6. **Li et al. (2023), BLIP-2: Bootstrapping Language-Image Pre-training with Frozen Image Encoders and Large Language Models. ICML.**
    - 用途：说明如何用轻量 Q-Former 连接冻结的视觉编码器与大语言模型，可作为图像理解/描述生成后再索引的技术依据。
    - 链接：[PMLR 正式页面](https://proceedings.mlr.press/v202/li23q.html)
 
-7. **Faysse et al. (2024), ColPali: Efficient Document Retrieval with Vision Language Models. arXiv:2407.01449.**
+7. **Faysse et al. (2025), ColPali: Efficient Document Retrieval with Vision Language Models. ICLR 2025；arXiv:2407.01449.**
    - 用途：重点前沿文献。把文档页面直接作为图像进行多向量编码和后期交互检索，避免复杂、脆弱的 OCR 管线；非常适合教材 PDF、课件、图表混排材料。
    - 链接：[arXiv](https://arxiv.org/abs/2407.01449)
 
@@ -112,7 +112,7 @@
     - 链接：[ACL Anthology](https://aclanthology.org/2024.naacl-long.20/)
 
 22. **Peng et al. (2025), Unanswerability Evaluation for Retrieval Augmented Generation. ACL.**
-    - 用途：强调知识库没有答案时系统应拒答或说明证据不足，而不是强行生成；对权威教学内容和幻觉控制尤其重要。
+    - 用途：将不可回答请求分为条件不明确、错误前提、无意义、模态不支持、安全风险和超出知识库六类，用于设计澄清、能力说明和拒答机制。
     - 链接：[ACL Anthology](https://aclanthology.org/2025.acl-long.415/)
 
 ## 3. 教育场景与中文扩展文献
@@ -126,8 +126,8 @@
 以下文献较新或仍为预印本，适合写“研究趋势与展望”，不建议在核心论证中占比过高：
 
 - **Ask in Any Modality: A Comprehensive Survey on Multimodal Retrieval-Augmented Generation** (2025), arXiv:2502.08826。用于补充多模态查询、检索、融合、增强和生成的分类框架。[链接](https://arxiv.org/abs/2502.08826)
-- **Multi-modal Retrieval Augmented Multi-modal Generation: Datasets, Evaluation Metrics and Strong Baselines** (2024), arXiv:2411.16365。适合关注多模态输出及基准评价。[链接](https://arxiv.org/abs/2411.16365)
-- **Self-adaptive Multimodal Retrieval-Augmented Generation** (2024), arXiv:2410.11321。讨论动态决定检索数量、降低固定 Top-k 带来的噪声。[链接](https://arxiv.org/abs/2410.11321)
+- **Multi-modal Retrieval Augmented Multi-modal Generation: Datasets, Evaluation Metrics and Strong Baselines** (2024), arXiv:2411.16365。提出“文字生成—图片插入—图文修正”策略，并从图像连贯性、帮助性、引用正确性和召回率评价多模态输出。[链接](https://arxiv.org/abs/2411.16365)
+- **Self-adaptive Multimodal Retrieval-Augmented Generation** (2024), arXiv:2410.11321。动态过滤文本和图片证据，并分别检查检索相关性、答案有效性和证据支持度。[链接](https://arxiv.org/abs/2410.11321)
 - **DRAGIN: Dynamic Retrieval Augmented Generation based on the Information Needs of Large Language Models** (2024), arXiv:2403.10081。讨论“何时检索、检索什么”。[链接](https://arxiv.org/abs/2403.10081)
 - **GENIUS: A Generative Framework for Universal Multimodal Search** (2025), CVPR。用于追踪通用多模态检索的新范式。[链接](https://openaccess.thecvf.com/content/CVPR2025/html/Kim_GENIUS_A_Generative_Framework_for_Universal_Multimodal_Search_CVPR_2025_paper.html)
 
@@ -187,3 +187,9 @@
 - 不要把“使用了 RAG”等同于“消除了幻觉”；RAG 仍可能出现检索错误、错误证据放大和有证据却不忠实生成等问题。
 - 教育场景除准确率外，还应评价来源可追溯性、课程标准一致性、难度适配、拒答能力、隐私权限和教师可控性。
 - 建议建立项目内小型评测集：文本题、图片题、图表题、音视频题、跨模态题、知识库无答案题，并分别记录 Recall@k/nDCG、答案正确性、忠实度、引用准确率和拒答率。
+
+## 9. 后续补充方向
+
+- **教育实证研究**：当前论文库以通用RAG技术为主，应补充AIED、EDM、Computers & Education等来源中有关教师信任、学习效果和课程标准一致性的研究。
+- **长视频与时间对齐**：补充视频RAG、长视频检索、说话人分离及课件页—讲解时间对齐研究；Whisper与ImageBind不足以单独覆盖完整视频RAG链路。
+- **中文文档验证**：ColPali原始训练数据没有非英语样本，应使用中文教材、试卷、PPT和公式页面建立独立测试集。
