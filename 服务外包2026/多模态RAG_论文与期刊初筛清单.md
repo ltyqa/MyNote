@@ -117,22 +117,9 @@
 
 ## 3. 教育场景与中文扩展文献
 
-23. **Wang and Lawrence (2025), Quantitative Evaluation of Using Large Language Models and Retrieval-Augmented Generation in Computer Science Education. SIGCSE TS.**
-    - 用途：教育领域实证研究，比较多个 LLM 配合 RAG 回答课程问题的效果和成本；可支撑项目意义与教育场景落地分析。
-    - DOI：10.1145/3641554.3701917
-    - 链接：[ACM 正式页面](https://doi.org/10.1145/3641554.3701917)
-
-24. **Retrieval-Augmented Generation for Educational Application: A Systematic Survey (2025/2026), Computers and Education: Artificial Intelligence.**
-    - 用途：教育 RAG 系统综述，可用于总结课程问答、智能辅导、内容生成、个性化学习及教育评测中的已有应用。
-    - 链接：[ScienceDirect](https://www.sciencedirect.com/science/article/pii/S2666920X25000578)
-
-25. **《浅谈大模型时代下的检索增强：发展趋势、挑战与展望》（2024），中国计算语言学大会 CCL。**
+23. **《浅谈大模型时代下的检索增强：发展趋势、挑战与展望》（2024），中国计算语言学大会 CCL。**
     - 用途：中文综述，围绕检索策略、内容处理及多模态知识增强展开，适合用于中文研究现状表述并追踪其参考文献。
     - 链接：[ACL Anthology PDF](https://aclanthology.org/2024.ccl-2.9.pdf)
-
-26. **《基于大语言模型与混合检索增强的教育知识图谱构建与智能问答》（2026）。**
-    - 用途：直接关联教育知识图谱、Vector RAG、Graph RAG、事实检索和多跳推理，可作为国内教育场景的扩展案例。
-    - 链接：[期刊页面](https://journals.istic.ac.cn/qbgc/ch/reader/view_abstract.aspx?file_no=202601003&flag=1)
 
 ## 4. 补充前沿线索（第二轮筛选）
 
