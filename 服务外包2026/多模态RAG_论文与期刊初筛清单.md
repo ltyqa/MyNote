@@ -1,6 +1,8 @@
 # 多模态检索增强生成（RAG）论文与期刊初筛清单
 
-整理日期：2026-07-22
+整理日期：2026-07-23
+
+本轮新增阅读：7 份正式会议论文 PDF（其中 P28 是原 P24 预印本的 ACL 2025 正式版本更新），均已保存至 `C:\Users\12480\Desktop\服务外包\文献综述和研究思路\多模态RAG论文库`。
 
 ## 1. 与项目的对应关系
 
@@ -41,9 +43,9 @@
    - 用途：说明如何用轻量 Q-Former 连接冻结的视觉编码器与大语言模型，可作为图像理解/描述生成后再索引的技术依据。
    - 链接：[PMLR 正式页面](https://proceedings.mlr.press/v202/li23q.html)
 
-7. **Faysse et al. (2025), ColPali: Efficient Document Retrieval with Vision Language Models. ICLR 2025；arXiv:2407.01449.**
+7. **Faysse et al. (2025), ColPali: Efficient Document Retrieval with Vision Language Models. ICLR 2025.**
    - 用途：重点前沿文献。把文档页面直接作为图像进行多向量编码和后期交互检索，避免复杂、脆弱的 OCR 管线；非常适合教材 PDF、课件、图表混排材料。
-   - 链接：[arXiv](https://arxiv.org/abs/2407.01449)
+   - 链接：[OpenReview 正式页面](https://openreview.net/forum?id=ogjBpZ8uSi)
 
 ### 2.2 3.2 语义检索与知识增强策略
 
@@ -121,15 +123,78 @@
     - 用途：中文综述，围绕检索策略、内容处理及多模态知识增强展开，适合用于中文研究现状表述并追踪其参考文献。
     - 链接：[ACL Anthology PDF](https://aclanthology.org/2024.ccl-2.9.pdf)
 
-## 4. 补充前沿线索（第二轮筛选）
+## 4. 2025 年正式论文新增精读
 
-以下文献较新或仍为预印本，适合写“研究趋势与展望”，不建议在核心论证中占比过高：
+### 4.1 正式版本更新
 
-- **Ask in Any Modality: A Comprehensive Survey on Multimodal Retrieval-Augmented Generation** (2025), arXiv:2502.08826。用于补充多模态查询、检索、融合、增强和生成的分类框架。[链接](https://arxiv.org/abs/2502.08826)
-- **Multi-modal Retrieval Augmented Multi-modal Generation: Datasets, Evaluation Metrics and Strong Baselines** (2024), arXiv:2411.16365。提出“文字生成—图片插入—图文修正”策略，并从图像连贯性、帮助性、引用正确性和召回率评价多模态输出。[链接](https://arxiv.org/abs/2411.16365)
-- **Self-adaptive Multimodal Retrieval-Augmented Generation** (2024), arXiv:2410.11321。动态过滤文本和图片证据，并分别检查检索相关性、答案有效性和证据支持度。[链接](https://arxiv.org/abs/2410.11321)
-- **DRAGIN: Dynamic Retrieval Augmented Generation based on the Information Needs of Large Language Models** (2024), arXiv:2403.10081。讨论“何时检索、检索什么”。[链接](https://arxiv.org/abs/2403.10081)
-- **GENIUS: A Generative Framework for Universal Multimodal Search** (2025), CVPR。用于追踪通用多模态检索的新范式。[链接](https://openaccess.thecvf.com/content/CVPR2025/html/Kim_GENIUS_A_Generative_Framework_for_Universal_Multimodal_Search_CVPR_2025_paper.html)
+24F. **Abootorabi et al. (2025), Ask in Any Modality: A Comprehensive Survey on Multimodal Retrieval-Augmented Generation. Findings of ACL 2025.**
+   - 定位：原 P24 预印本的正式发表版本，系统分类检索、融合、增强、生成、训练和智能体方法，并指出泛化、精确归因、跨模态推理、知识投毒防御和统一嵌入仍是开放问题。
+   - 使用边界：该文是综述，不提供各方法的统一复现实验，核心论证仍应回到原始论文。
+   - DOI：10.18653/v1/2025.findings-acl.861
+   - 链接：[ACL Anthology](https://aclanthology.org/2025.findings-acl.861/)
+   - 本地文件：`P28_Ask_in_Any_Modality_ACL2025.pdf`
+
+### 4.2 视觉丰富文档与多文档 RAG
+
+28. **Tanaka et al. (2025), VDocRAG: Retrieval-Augmented Generation over Visually-Rich Documents. CVPR 2025.**
+   - 方法：把 PDF/PPTX 页面统一为图像，使用基于 LVLM 的双编码检索器和视觉生成器；提出 RCR/RCG 两个自监督任务，把整页视觉信息压缩到稠密表示。
+   - 原文结果：在 ChartQA、SlideVQA、InfoVQA、DUDE 上，视觉 RAG 相对同底座文本 RAG 的端到端得分分别提高 24.0、15.6、15.7、8.4 个点（single-pool）。
+   - 局限：在长文本、OCR 密集页面上不一定优于文本检索；未解决大规模图像索引成本，且训练使用 OCR 伪目标。
+   - 项目用途：支持“复杂视觉页走原生视觉通道，长文本页保留文本通道”的双索引设计。
+   - 链接：[CVPR Open Access](https://openaccess.thecvf.com/content/CVPR2025/html/Tanaka_VDocRAG_Retrieval-Augmented_Generation_over_Visually-Rich_Documents_CVPR_2025_paper.html)
+   - 本地文件：`P29_VDocRAG_CVPR2025.pdf`
+
+29. **Suri et al. (2025), VisDoM: Multi-Document QA with Visually Rich Elements Using Multimodal Retrieval-Augmented Generation. NAACL 2025.**
+   - 方法：文本 RAG 与视觉 RAG 并行，分别执行证据整理和推理，再通过推理链一致性约束融合答案。
+   - 原文结果：VisDoMRAG 在五个多文档子集上优于长上下文、纯文本和纯视觉基线；ColQwen2 的来源文档识别平均为 96.94%，BGE-1.5 为 92.40%。
+   - 局限：每个查询需三次 LLM 调用，仍保留 OCR/解析成本，论文也明确不能消除幻觉。
+   - 项目用途：为教材、论文、课件跨文档证据融合及“文本—视觉冲突检查”提供直接依据。
+   - DOI：10.18653/v1/2025.naacl-long.310
+   - 链接：[ACL Anthology](https://aclanthology.org/2025.naacl-long.310/)
+   - 本地文件：`P30_VisDoM_NAACL2025.pdf`
+
+### 4.3 统一检索、分层检索与逻辑检索
+
+30. **Zhang et al. (2025), Bridging Modalities: Improving Universal Multimodal Retrieval by Multimodal Large Language Models. CVPR 2025.**
+   - 方法：General Multimodal Embedder（GME）用一个 MLLM 编码文本、图像、视觉文档和图文混合输入，以指令化对比学习和难负例训练统一嵌入。
+   - 原文结果：GME-Qwen2VL-2B/7B 在 47 个数据集组成的 UMRB 上平均得分为 64.45/67.44；7B 的文本到视觉文档 nDCG@5 为 89.92。
+   - 局限：模型与约 800 万训练样本带来明显训练、推理和部署成本，不能直接替代轻量检索器而不做本地基准测试。
+   - 项目用途：作为第二阶段统一检索器候选，与 BM25、文本 Dense 和 ColPali 组合方案比较成本和效果。
+   - 链接：[CVPR Open Access](https://openaccess.thecvf.com/content/CVPR2025/html/Zhang_Bridging_Modalities_Improving_Universal_Multimodal_Retrieval_by_Multimodal_Large_Language_CVPR_2025_paper.html)
+   - 本地文件：`P31_GME_CVPR2025.pdf`
+
+31. **Yang et al. (2025), OMGM: Orchestrate Multiple Granularities and Modalities for Efficient Multimodal Retrieval. ACL 2025.**
+   - 方法：按“实体摘要粗检索—图文融合实体重排—章节文本细筛”逐步缩小检索空间，并在阶段间传递相似度。
+   - 原文结果：多模态重排使 E-VQA/InfoSeek 的 Recall@1 从 19.1/52.6 提高到 42.8/64.0；消融显示第二阶段带来最大问答增益。
+   - 项目用途：迁移为“资源—页面—知识块”三级检索，但论文任务是 KB-VQA，不能直接声称已验证教学文档。
+   - DOI：10.18653/v1/2025.acl-long.1198
+   - 链接：[ACL Anthology](https://aclanthology.org/2025.acl-long.1198/)
+   - 本地文件：`P32_OMGM_ACL2025.pdf`
+
+32. **Wu et al. (2025), MoLoRAG: Bootstrapping Document Understanding via Multi-modal Logic-aware Retrieval. EMNLP 2025.**
+   - 方法：用 ColPali 表示页面并构建相似度页图，由轻量 VLM 图遍历，同时估计语义相关性与逻辑相关性。
+   - 原文结果：在四个多页 DocQA 数据集上，平均问答准确率比 LVLM 直接推理提高 9.68%，检索精度比基线提高 7.44%；效果随生成模型上下文能力和 Top-k 改变。
+   - 局限：主要验证已知相关文档内的闭域检索，跨文档页图会显著增加复杂度。
+   - 项目用途：把目录层级、相邻页、图注引用和例题—解析关系纳入跨页证据检索。
+   - DOI：10.18653/v1/2025.emnlp-main.708
+   - 链接：[ACL Anthology](https://aclanthology.org/2025.emnlp-main.708/)
+   - 本地文件：`P33_MoLoRAG_EMNLP2025.pdf`
+
+33. **Liu et al. (2025), ViDoRAG: Visual Document Retrieval-Augmented Generation via Dynamic Iterative Reasoning Agents. EMNLP 2025.**
+   - 方法：用 GMM 分别估计文本与视觉相似度分布、动态确定召回数量，再由 Seeker—Inspector—Answer 三智能体迭代选择、反思和核验。
+   - 原文结果：GPT-4o 上总体准确率由 TextRAG 的 63.5、VisualRAG 的 72.1 提高到 79.4；GMM 将平均页面数从 10 降至 6.76，同时准确率从 72.1 升至 72.8。
+   - 局限：多智能体迭代引入延迟，问题构造可能有偏差，论文明确指出仍会产生无依据幻觉。
+   - 项目用途：动态 Top-k 可进入标准路径；完整多智能体流程只适合正式试题、复杂教案等高风险慢路径。
+   - DOI：10.18653/v1/2025.emnlp-main.464
+   - 链接：[ACL Anthology](https://aclanthology.org/2025.emnlp-main.464/)
+   - 本地文件：`P34_ViDoRAG_EMNLP2025.pdf`
+
+### 4.4 仍需继续跟踪的前沿线索
+
+- **Multi-modal Retrieval Augmented Multi-modal Generation** (2024), arXiv:2411.16365：多模态图文生成策略、数据集和评价指标。[链接](https://arxiv.org/abs/2411.16365)
+- **Self-adaptive Multimodal Retrieval-Augmented Generation** (2024), arXiv:2410.11321：动态过滤证据和答案支持度检查。[链接](https://arxiv.org/abs/2410.11321)
+- **DRAGIN** (2024), arXiv:2403.10081：根据模型信息需求判断何时检索、检索什么。[链接](https://arxiv.org/abs/2403.10081)
+- **GENIUS** (2025), CVPR：通用多模态生成式检索范式。[链接](https://openaccess.thecvf.com/content/CVPR2025/html/Kim_GENIUS_A_Generative_Framework_for_Universal_Multimodal_Search_CVPR_2025_paper.html)
 
 ## 5. 推荐重点关注的期刊与会议
 
@@ -192,4 +257,6 @@
 
 - **教育实证研究**：当前论文库以通用RAG技术为主，应补充AIED、EDM、Computers & Education等来源中有关教师信任、学习效果和课程标准一致性的研究。
 - **长视频与时间对齐**：补充视频RAG、长视频检索、说话人分离及课件页—讲解时间对齐研究；Whisper与ImageBind不足以单独覆盖完整视频RAG链路。
-- **中文文档验证**：ColPali原始训练数据没有非英语样本，应使用中文教材、试卷、PPT和公式页面建立独立测试集。
+- **中文文档验证**：ColPali、VDocRAG、VisDoM、GME、MoLoRAG 与 ViDoRAG 的核心实验均不能替代中文教学材料验证；应使用中文教材、试卷、PPT、公式页面及跨页例题建立独立测试集。
+- **成本与慢路径验证**：VisDoM 和 ViDoRAG 都依赖多次模型调用，应分别报告普通问答与复杂教学任务的 P50/P95 延迟、Token 成本和质量收益。
+- **开放域逻辑检索**：MoLoRAG 主要处理给定文档内部的页图；本项目若扩展到多个教材版本，需要研究文档级粗检索后再构建局部页图，避免全库建图。
