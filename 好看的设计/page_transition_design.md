@@ -1,68 +1,74 @@
-# Project Simply - 全屏色彩扩散与收回转场设计方案 (Design System & Page Transition)
+# 通用型「原点色彩扩散与收回」全屏转场设计方案与接入指南
+(Universal Origin-Based Color Expansion Page Transition Specification)
 
-本文档提取自 [Project Simply](https://projectsimply.com/) 官方网站的交互设计与转场特效，详细拆解其核心视觉语言、按钮样式以及**点击色彩从按钮扩充至全屏再收回**的核心实现原理与完整代码 Blueprint。
+本指南旨在提供一套**高可复用、通用型**的页面转场与交互组件设计规范。该方案解耦了具体业务场景与特定配色，支持灵活配置主题色、动画曲线、扩散机制与收回方向，可无缝适配个人作品集、企业官网、SaaS 平台、电商展示以及数字展厅等各类 Web 项目。
 
 ---
 
-## 一、 视觉设计系统 (Design System)
+## 一、 设计理念与适用场景
 
-Project Simply 采用了**新复古/新粗犷主义 (Neo-Brutalism)** 结合**动感先锋色彩 (Vivid Cultural Aesthetics)** 的设计风格。
+### 1.1 核心设计理念
 
-### 1.1 品牌核心调色板 (Color Palette)
+“原点色彩扩散转场”是一种强交互感、极具视觉冲击力的页面过渡形式：
+- **操作反馈直观 (Origin-Aware)**：转场色彩以用户点击的位置（按钮、卡片、菜单项）为起点向外波浪式扩散，建立起操作动作与全屏变化的强关联。
+- **视觉连贯性 (Color Continuum)**：将元素自身的品牌色/主题色无缝扩展至全屏，随后在蒙版全屏覆盖时完成新页面加载，最后优雅收回蒙版。
+- **品牌调性高度契合 (Themeable)**：只需更改色彩参数，即可从先锋高饱和风格秒级切换为暗黑科技风或高级奢华风。
 
-每个业务板块（Sectors）与案例（Work Items）均绑定独有的高饱和/高明度 Accent Color，形成极强视觉记忆点：
+### 1.2 适用项目类型与配色推荐
+
+| 项目类型 | 设计风格 | 建议配色方案 | 转场收回效果推荐 |
+| :--- | :--- | :--- | :--- |
+| **先锋创意 / 艺术设计** | 高饱和新粗犷主义 | 霓虹黄 `#E4D515` / 电光蓝 `#4ACFED` / 荧光绿 `#ABF7A1` | 向上/向侧平移卷缩 (`slide-up`) |
+| **企业 SaaS / 科技平台** | 极简暗黑 / 沉浸式科技 | 深空灰 `#121316` / 极光蓝 `#0066FF` / 霓光紫 `#7C3AED` | 原点反向收缩 (`reverse-shrink`) |
+| **高端奢华 / 品牌官网** | 优雅典雅 / 莫兰迪色系 | 雾霭蓝 `#8EA4B8` / 暖沙米 `#E8E2D5` / 橄榄绿 `#5C6B57` | 柔和渐隐淡出 (`fade-out`) |
+| **电商平台 / 多业务线** | 分类语义化主题 | 依据商品/板块分类（如服装、数码、美妆对应不同色彩） | 幕布对开/收缩 (`curtain`) |
+
+---
+
+## 二、 核心参数与 CSS 变量设计系统
+
+通过定义一套通用的 CSS Custom Properties（变量），使得转场特效的颜色、速度、缓动函数与运动方向均可在全局或单元素上轻松复写：
+
+### 2.1 CSS 全局变量声明
 
 ```css
 :root {
-  /* 基础对比色 */
-  --bg-beige: #F5F2EB;       /* 主背景米白色 */
-  --text-dark: #161616;      /* 极深黑文本 */
-  --brand-purple: #754AF0;   /* 品牌标志紫 */
-
-  /* 板块专属 Accent 色彩 (通过 data-color 传递) */
-  --color-blue: #4ACFED;     /* 电光蓝 (Fashion & Talent) */
-  --color-pink: #FFB5D6;     /* 霓虹粉 (Music & Events) */
-  --color-green: #ABF7A1;    /* 荧光绿 (Venues & Co-working) */
-  --color-yellow: #E4D515;   /* 亮金黄 (Featured Case Studies) */
+  /* 基础与默认主题 */
+  --transition-default-color: #3B82F6; /* 默认转场主题色 (可被 data-transition-color 覆盖) */
+  
+  /* 动画时间参数 */
+  --transition-expand-duration: 400ms;  /* 扩散覆盖阶段时长 */
+  --transition-retract-duration: 450ms; /* 收回揭晓阶段时长 */
+  
+  /* 缓动曲线 (Bezier 贝塞尔曲线) */
+  --transition-expand-ease: cubic-bezier(0.77, 0, 0.175, 1);  /* 强烈冲力扩散 */
+  --transition-retract-ease: cubic-bezier(0.25, 1, 0.5, 1);    /* 柔和平滑收回 */
+  
+  /* 层级定义 */
+  --transition-z-index: 99999;
 }
 ```
 
-### 1.2 按钮与卡片交互设计 (Buttons & Cards UI)
+---
 
-- **胶囊/圆角形状**：配合无衬线加粗字体（如 `Inter` / `Outfit` / `Space Grotesk`）。
-- **Hover 反馈**：鼠标悬停时触发微交互，例如渐变扩展、底色突变、微放大或跑马灯字幕（Marquee）。
-- **色彩属性绑定**：每个可交互转场元素添加 `data-color` 属性与 `data-work-item-link` 标记。
+## 三、 多样化转场收回动画模式 (Transition Retract Modes)
+
+根据不同项目的视觉诉求，转场第二阶段的“收回蒙版”提供以下四种通用模式：
+
+1. **Slide Up/Left/Right/Down（平移卷缩）**：蒙版保持覆盖，沿指定方向平移滑出视口（最推荐，有明确的空间层级感）。
+2. **Reverse Shrink（原点反向收缩）**：蒙版向点击原点（或屏幕中心）缩回至消失。
+3. **Fade Out（渐隐淡出）**：蒙版透明度 `opacity` 从 1 渐变为 0，适合优雅平缓的叙事体验。
+4. **Scale Down（中心缩放）**：蒙版在整体缩小的同时渐隐。
 
 ---
 
-## 二、 全屏色彩扩散与收回转场原理 (Transition Mechanism)
+## 四、 通用型全栈实现 Blueprint (Universal Blueprint)
 
-### 2.1 三阶段转场流程 (Three-Phase Flow)
+下面提供一套**无第三方依赖、标准 DOM + CSS 原生实现**的通用代码架构。
 
-```
-[阶段 1: 点击触发]  ---> [阶段 2: 色彩全屏扩散]  ---> [阶段 3: 页面替换与收回]
-点击按钮/卡片          遮罩层自点击坐标/按钮中心     遮罩层充满全屏，完成内容加载后
-读取 data-color        向外以圆形 (clip-path) 扩大   向上/向侧边平移或反向收缩隐去
-```
+### 4.1 通用 HTML 结构与 Data 属性定义
 
-1. **触发与原点计算 (Origin Calculation)**：
-   - 监听含有转场标记的链接点击事件（例如 `[data-color]`）。
-   - 获取点击点的视口坐标 `(x, y)`，作为圆形扩散的中心点。
-2. **扩散退出 (Exit Transition / Expand)**：
-   - 激活全屏 Overlay 元素 `.psPageTransition`。
-   - 将 Overlay 的背景颜色设为目标元素的 `data-color`。
-   - 使用 CSS `clip-path: circle(0% at x y)` 动画过渡至 `circle(150% at x y)`，在 350ms - 450ms 内瞬间铺满整个屏幕。
-3. **收回进入 (Entrance Transition / Retract)**：
-   - 当 Overlay 充满全屏后，触发页面渲染或 AJAX 内容无刷新替换。
-   - Overlay 执行收回动画（通过向上滑动 `transform: translateY(-100%)` 或反向 `clip-path` 收缩），露出新页面。
-
----
-
-## 三、 完整可运行代码实现 (Implementation Blueprint)
-
-包含完整 HTML、CSS 与 JavaScript 逻辑，可以直接复制运行预览效果。
-
-### 3.1 HTML 结构
+使用 `data-transition-*` 自定义属性绑定转场控制：
 
 ```html
 <!DOCTYPE html>
@@ -70,199 +76,88 @@ Project Simply 采用了**新复古/新粗犷主义 (Neo-Brutalism)** 结合**�
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project Simply Color Transition Effect</title>
-  <link rel="stylesheet" href="style.css">
+  <title>通用转场组件示例</title>
+  <link rel="stylesheet" href="page-transition.css">
 </head>
 <body>
 
-  <!-- 转场遮罩层 -->
-  <div class="psPageTransition" id="pageTransitionOverlay"></div>
+  <!-- 通用转场遮罩节点 -->
+  <div class="ui-page-transition" id="pageTransitionOverlay" aria-hidden="true"></div>
 
-  <!-- 顶部导航栏 -->
-  <header class="header">
-    <div class="logo">PROJECT SIMPLY</div>
-    <nav class="nav-sectors">
-      <a href="#fashion" class="sector-btn" data-color="#4ACFED">Fashion & Talent</a>
-      <a href="#music" class="sector-btn" data-color="#FFB5D6">Music & Events</a>
-      <a href="#venues" class="sector-btn" data-color="#ABF7A1">Venues & Co-working</a>
+  <!-- 页面顶部导航栏示例 -->
+  <header class="app-header">
+    <div class="brand-logo">CORE DESIGN</div>
+    <nav class="nav-links">
+      <!-- 通过 data-transition-color 自由配置不同按钮的色彩 -->
+      <a href="#product" class="btn" data-transition-color="#0066FF" data-retract-mode="slide-up">产品中心</a>
+      <a href="#solutions" class="btn" data-transition-color="#7C3AED" data-retract-mode="slide-up">解决方案</a>
+      <a href="#about" class="btn" data-transition-color="#10B981" data-retract-mode="reverse-shrink">关于我们</a>
     </nav>
   </header>
 
-  <!-- 主体内容卡片流 -->
-  <main class="content" id="appContent">
-    <section class="hero">
-      <h1>A brand, website and AI studio for cultural pioneers</h1>
-      <p>点击下方卡片或导航按钮预览全屏色彩扩充与收回转场特效</p>
+  <!-- 页面主体示例 -->
+  <main class="app-main">
+    <section class="hero-section">
+      <h1>通用原点色彩扩散转场</h1>
+      <p>点击任何带有 <code>data-transition-color</code> 的元素即可预览通用转场。</p>
     </section>
-
-    <div class="grid">
-      <div class="card" data-transition-link data-color="#4ACFED">
-        <div class="card-media" style="background: #2a3a4a;"></div>
-        <div class="card-title">DreamHouse</div>
-      </div>
-      <div class="card" data-transition-link data-color="#FFB5D6">
-        <div class="card-media" style="background: #4a2a3a;"></div>
-        <div class="card-title">Hyde Park Winter Wonderland</div>
-      </div>
-      <div class="card" data-transition-link data-color="#ABF7A1">
-        <div class="card-media" style="background: #2a4a3a;"></div>
-        <div class="card-title">Street Food Circus</div>
-      </div>
-      <div class="card" data-transition-link data-color="#E4D515">
-        <div class="card-media" style="background: #4a4a2a;"></div>
-        <div class="card-title">The Warehouse Project</div>
-      </div>
-    </div>
   </main>
 
-  <script src="script.js"></script>
+  <script src="page-transition.js"></script>
 </body>
 </html>
 ```
 
-### 3.2 CSS 样式 (style.css)
+### 4.2 标准化 CSS (page-transition.css)
 
 ```css
-:root {
-  --bg-beige: #F5F2EB;
-  --text-dark: #161616;
-  --transition-out-duration: 0.4s;
-  --transition-in-duration: 0.5s;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  background-color: var(--bg-beige);
-  color: var(--text-dark);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-/* 顶部导航 */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 2rem 4rem;
-}
-
-.logo {
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  font-size: 1.25rem;
-}
-
-.nav-sectors {
-  display: flex;
-  gap: 1rem;
-}
-
-.sector-btn {
-  text-decoration: none;
-  color: var(--text-dark);
-  font-weight: 600;
-  padding: 0.75rem 1.5rem;
-  border-radius: 999px;
-  background-color: transparent;
-  transition: transform 0.2s ease, filter 0.2s ease;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-}
-
-.sector-btn:hover {
-  transform: translateY(-2px);
-}
-
-/* 关联色彩分类标签 */
-.sector-btn[data-color="#4ACFED"] { background-color: #4ACFED; }
-.sector-btn[data-color="#FFB5D6"] { background-color: #FFB5D6; }
-.sector-btn[data-color="#ABF7A1"] { background-color: #ABF7A1; }
-
-/* 内容区域 */
-.content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-.hero {
-  margin-bottom: 4rem;
-}
-
-.hero h1 {
-  font-size: 3.5rem;
-  line-height: 1.1;
-  max-width: 800px;
-  margin-bottom: 1rem;
-}
-
-/* 卡片网格 */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-}
-
-.card {
-  border-radius: 16px;
-  overflow: hidden;
-  cursor: pointer;
-  background: #ffffff;
-  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-  position: relative;
-}
-
-.card:hover {
-  transform: scale(1.02);
-}
-
-.card-media {
-  height: 320px;
-  width: 100%;
-}
-
-.card-title {
-  padding: 1.25rem 1.5rem;
-  font-weight: 700;
-  font-size: 1.1rem;
-}
-
 /* ========================================================
-   核心：全屏色彩扩散与收回遮罩 (psPageTransition)
+   通用转场遮罩层样式 (UI Page Transition Overlay)
    ======================================================== */
-.psPageTransition {
+.ui-page-transition {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 9999;
+  z-index: var(--transition-z-index, 99999);
   pointer-events: none;
-  background-color: transparent;
+  background-color: var(--transition-color, var(--transition-default-color));
   clip-path: circle(0% at 50% 50%);
-  will-change: clip-path, transform;
+  will-change: clip-path, transform, opacity;
+  opacity: 1;
 }
 
-/* 第一阶段：从点击位置扩散扩张至 150% 全屏 */
-.psPageTransition.is-expanding {
+/* 阶段 1：点击原点向外扩散 */
+.ui-page-transition.is-expanding {
   pointer-events: auto;
-  animation: circleExpand var(--transition-out-duration) cubic-bezier(0.77, 0, 0.175, 1) forwards;
+  animation: transitionExpand var(--transition-expand-duration) var(--transition-expand-ease) forwards;
 }
 
-/* 第二阶段：向上/侧向收回揭晓新页面 */
-.psPageTransition.is-retracting {
+/* 阶段 2A：模式 A - 向上卷起收回 (Slide Up) */
+.ui-page-transition.is-retracting-slide-up {
   pointer-events: none;
-  animation: slideRetract var(--transition-in-duration) cubic-bezier(0.77, 0, 0.175, 1) forwards;
+  animation: retractSlideUp var(--transition-retract-duration) var(--transition-retract-ease) forwards;
 }
 
-@keyframes circleExpand {
+/* 阶段 2B：模式 B - 原点反向收缩 (Reverse Shrink) */
+.ui-page-transition.is-retracting-reverse-shrink {
+  pointer-events: none;
+  animation: retractReverseShrink var(--transition-retract-duration) var(--transition-retract-ease) forwards;
+}
+
+/* 阶段 2C：模式 C - 渐隐淡出 (Fade Out) */
+.ui-page-transition.is-retracting-fade-out {
+  pointer-events: none;
+  animation: retractFadeOut var(--transition-retract-duration) var(--transition-retract-ease) forwards;
+}
+
+/* ========================================================
+   Keyframes 关键帧动画集
+   ======================================================== */
+
+/* 扩散覆盖全屏 */
+@keyframes transitionExpand {
   0% {
     clip-path: circle(0% at var(--click-x, 50%) var(--click-y, 50%));
   }
@@ -271,93 +166,167 @@ body {
   }
 }
 
-@keyframes slideRetract {
+/* 向上平移收回 */
+@keyframes retractSlideUp {
   0% {
     clip-path: circle(150% at 50% 50%);
     transform: translateY(0%);
   }
   100% {
     clip-path: circle(150% at 50% 50%);
-    transform: translateY(-100%); /* 向上卷起收回 */
+    transform: translateY(-100%);
+  }
+}
+
+/* 原点反向收缩收回 */
+@keyframes retractReverseShrink {
+  0% {
+    clip-path: circle(150% at var(--click-x, 50%) var(--click-y, 50%));
+  }
+  100% {
+    clip-path: circle(0% at var(--click-x, 50%) var(--click-y, 50%));
+  }
+}
+
+/* 渐隐收回 */
+@keyframes retractFadeOut {
+  0% {
+    clip-path: circle(150% at 50% 50%);
+    opacity: 1;
+  }
+  100% {
+    clip-path: circle(150% at 50% 50%);
+    opacity: 0;
   }
 }
 ```
 
-### 3.3 JavaScript 交互逻辑 (script.js)
+### 4.3 面向对象的 JavaScript 控制器 (page-transition.js)
+
+封装为纯 ES6 / Class 模式，无任何框架绑定，可随时集成至 React / Vue / Svelte 或原生项目：
 
 ```javascript
-document.addEventListener('DOMContentLoaded', () => {
-  const overlay = document.getElementById('pageTransitionOverlay');
+/**
+ * Universal Page Transition Controller
+ * 通用原点色彩扩散转场控制器
+ */
+class PageTransitionController {
+  constructor(options = {}) {
+    this.overlay = document.getElementById(options.overlayId || 'pageTransitionOverlay');
+    this.defaultColor = options.defaultColor || '#3B82F6';
+    this.defaultRetractMode = options.defaultRetractMode || 'slide-up';
+    this.onPageUpdate = options.onPageUpdate || null;
 
-  // 获取所有支持转场特效的触发元素
-  const triggerElements = document.querySelectorAll('[data-color]');
+    if (!this.overlay) {
+      console.warn('PageTransitionController: 未找到转场 Overlay 节点。');
+      return;
+    }
 
-  triggerElements.forEach(element => {
-    element.addEventListener('click', (event) => {
-      event.preventDefault();
-
-      // 1. 获取点击位置 (相对于 Viewport)
-      const x = event.clientX;
-      const y = event.clientY;
-
-      // 2. 获取该元素定义的色彩
-      const accentColor = element.getAttribute('data-color') || '#754AF0';
-
-      // 3. 执行全屏扩大转场
-      triggerColorTransition({ x, y, color: accentColor }, () => {
-        // 在遮罩完全覆盖页面后，可在此处加载/替换新页面内容 (例如 fetch API 或 SPA 路由)
-        console.log(`页面逻辑更新：已切换至 ${element.textContent || '新页面'}`);
-      });
-    });
-  });
+    this.initListeners();
+  }
 
   /**
-   * 触发转场控制函数
+   * 自动监听页面中带有 [data-transition-color] 属性的元素
    */
-  function triggerColorTransition({ x, y, color }, onCoveredCallback) {
-    // 设置点击坐标变量与背景色
-    overlay.style.setProperty('--click-x', `${x}px`);
-    overlay.style.setProperty('--click-y', `${y}px`);
-    overlay.style.backgroundColor = color;
+  initListeners() {
+    document.addEventListener('click', (event) => {
+      const trigger = event.target.closest('[data-transition-color], [data-page-transition]');
+      if (!trigger) return;
 
-    // 清理之前的 class
-    overlay.classList.remove('is-expanding', 'is-retracting');
-    
-    // 强制重绘以确保动画生效
-    void overlay.offsetWidth;
-
-    // 步骤 A: 展开全屏
-    overlay.classList.add('is-expanding');
-
-    // 展开动画完成后 (约 400ms)
-    setTimeout(() => {
-      // 执行页面数据/DOM 替换
-      if (typeof onCoveredCallback === 'function') {
-        onCoveredCallback();
+      // 如果是页面跳转链接，阻止默认刷新
+      if (trigger.tagName === 'A' && trigger.getAttribute('href')?.startsWith('#')) {
+        event.preventDefault();
       }
 
-      // 步骤 B: 向上卷起/收回遮罩
-      overlay.classList.remove('is-expanding');
-      overlay.classList.add('is-retracting');
+      // 获取触发元素定义的配置
+      const color = trigger.getAttribute('data-transition-color') || this.defaultColor;
+      const mode = trigger.getAttribute('data-retract-mode') || this.defaultRetractMode;
+      const targetUrl = trigger.getAttribute('href');
 
-      // 收回动画完成后重置状态
+      // 获取点击坐标
+      const originX = event.clientX;
+      const originY = event.clientY;
+
+      this.startTransition({
+        x: originX,
+        y: originY,
+        color: color,
+        mode: mode,
+        onComplete: () => {
+          if (this.onPageUpdate) {
+            this.onPageUpdate(targetUrl, trigger);
+          }
+        }
+      });
+    });
+  }
+
+  /**
+   * 手动触发转场 API
+   */
+  startTransition({ x = window.innerWidth / 2, y = window.innerHeight / 2, color, mode = 'slide-up', onComplete }) {
+    const activeColor = color || this.defaultColor;
+
+    // 设置 CSS 局部变量
+    this.overlay.style.setProperty('--click-x', `${x}px`);
+    this.overlay.style.setProperty('--click-y', `${y}px`);
+    this.overlay.style.setProperty('--transition-color', activeColor);
+
+    // 重置所有 class 状态
+    this.overlay.className = 'ui-page-transition';
+    void this.overlay.offsetWidth; // 触发 DOM Reflow
+
+    // 1. 启动扩散
+    this.overlay.classList.add('is-expanding');
+
+    // 2. 扩散完成 -> 执行数据/路由切换 -> 启动收回
+    setTimeout(() => {
+      if (typeof onComplete === 'function') {
+        onComplete();
+      }
+
+      this.overlay.classList.remove('is-expanding');
+      this.overlay.classList.add(`is-retracting-${mode}`);
+
+      // 3. 收回完成 -> 清理动画状态
       setTimeout(() => {
-        overlay.classList.remove('is-retracting');
-        overlay.style.transform = '';
+        this.overlay.className = 'ui-page-transition';
+        this.overlay.style.transform = '';
+        this.overlay.style.opacity = '';
       }, 500);
 
-    }, 400); // 对应 --transition-out-duration
+    }, 400); // 与 CSS --transition-expand-duration 保持一致
   }
+}
+
+// 初始化全局实例
+document.addEventListener('DOMContentLoaded', () => {
+  window.pageTransition = new PageTransitionController({
+    defaultColor: '#3B82F6',
+    defaultRetractMode: 'slide-up',
+    onPageUpdate: (url, triggerEl) => {
+      console.log(`[PageTransition] 页面切至: ${url}`);
+    }
+  });
 });
 ```
 
 ---
 
-## 四、 核心设计要点总结 (Design Highlights)
+## 五、 最佳实践与性能/无障碍优化 (Best Practices)
 
-1. **原点感知 (Origin-Aware Ripple)**:
-   使用 `event.clientX` 与 `event.clientY` 将变量传递给 CSS `clip-path: circle()`, 让扩张波浪始终从用户点击的按钮精准涌出。
-2. **色彩延续 (Color Consistency)**:
-   转场遮罩的颜色与被点击按钮的 `data-color` 严格一致，增强了界面操作的连贯性与趣味性。
-3. **高效性能 (GPU Acceleration)**:
-   动画完全依赖 `clip-path` 与 `transform` 属性，由 GPU 硬件加速完成，无重排 (Reflow) 卡顿。
+1. **减弱动画适配 (Accessibility / Reduced Motion)**:
+   为习惯减弱动效的用户提供回退机制：
+   ```css
+   @media (prefers-reduced-motion: reduce) {
+     .ui-page-transition {
+       animation: none !important;
+       transition: opacity 200ms ease;
+     }
+   }
+   ```
+2. **GPU 硬件加速**:
+   - 动画属性仅使用 `clip-path`、`transform` 与 `opacity`。
+   - 保留 `will-change: clip-path, transform, opacity` 提示浏览器开辟独立图层渲染，确保 60FPS/120FPS 丝滑体验。
+3. **单页应用 (Vue / React / Next.js) 路由集成**:
+   - 在 Vue Router 的 `beforeEach` 或 React Router 的 Location Change 挂钩中调用 `pageTransition.startTransition()`，在路由加载完成后触发收回动画即可。
