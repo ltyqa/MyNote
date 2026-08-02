@@ -7,3 +7,5 @@
 claude code看视频[bradautomates/claude-video: Give Claude the ability to watch any video. /watch downloads, extracts frames, transcribes, hands it all to Claude.](https://github.com/bradautomates/claude-video)
 
 aippt生成[sligter/LandPPT: 一个基于LLM的演示文稿生成平台，能够自动将文档内容转换为专业的PPT演示文稿。平台支持多种AI模型，提供丰富的模板和样式选择，让用户能够创建高质量的演示文稿。](https://github.com/sligter/LandPPT)
+
+密码连接网关[oomol-lab/open-connector: Open-source auth gateway connecting 1000+ SaaS providers to AI agents through SDK, CLI, MCP, HTTP, and OpenAPI.](https://github.com/oomol-lab/open-connector)
