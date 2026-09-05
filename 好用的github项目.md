@@ -13,3 +13,5 @@ aippt生成[sligter/LandPPT: 一个基于LLM的演示文稿生成平台，能够
 agent对话[herdrdev/herdr: the runtime your coding agents live on](https://github.com/herdrdev/herdr)
 
 星空（有点高级，但是没用）[gunerguner/AdAstra](https://github.com/gunerguner/AdAstra)
+
+工具箱[luolangaga/tubatools: 图吧工具箱 winUI3 版](https://github.com/luolangaga/tubatools)
