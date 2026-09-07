@@ -22,3 +22,4 @@ agent对话[herdrdev/herdr: the runtime your coding agents live on](https://gith
 
 一键生课[THU-MAIC/OpenMAIC: Open Multi-Agent Interactive Classroom — Get an immersive, multi-agent learning experience in just one click](https://github.com/THU-MAIC/OpenMAIC)
 
+角色性格编辑[SillyTavern/SillyTavern: LLM Frontend for Power Users.](https://github.com/SillyTavern/SillyTavern)
