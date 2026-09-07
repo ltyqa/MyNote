@@ -23,3 +23,5 @@ agent对话[herdrdev/herdr: the runtime your coding agents live on](https://gith
 一键生课[THU-MAIC/OpenMAIC: Open Multi-Agent Interactive Classroom — Get an immersive, multi-agent learning experience in just one click](https://github.com/THU-MAIC/OpenMAIC)
 
 角色性格编辑[SillyTavern/SillyTavern: LLM Frontend for Power Users.](https://github.com/SillyTavern/SillyTavern)
+
+人格参数配置[PersonaNexus/personanexus：使用 YAML 而非代码定义 AI 代理人格。心理学框架（OCEAN/DISC）、行为模式、情绪状态和交互协议——编译为适用于任何 LLM 的系统提示词。 --- PersonaNexus/personanexus: Define AI agent personalities in YAML, not code. Psychological frameworks (OCEAN/DISC), behavioral modes, mood states, and interaction protocols — compiled to system prompts for any LLM.](https://github.com/PersonaNexus/personanexus)
