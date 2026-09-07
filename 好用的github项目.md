@@ -15,3 +15,8 @@ agent对话[herdrdev/herdr: the runtime your coding agents live on](https://gith
 星空（有点高级，但是没用）[gunerguner/AdAstra](https://github.com/gunerguner/AdAstra)
 
 工具箱[luolangaga/tubatools: 图吧工具箱 winUI3 版](https://github.com/luolangaga/tubatools)
+
+声音克隆+字幕转写+。。。[debpalash/VoiceStudio: VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.](https://github.com/debpalash/VoiceStudio)
+
+专业图表绘制[tt-a1i/archify: Agent skill for beautiful, verifiable architecture, workflow, sequence, data-flow, and lifecycle diagrams—self-contained HTML with motion and crisp export.](https://github.com/tt-a1i/archify)
+
