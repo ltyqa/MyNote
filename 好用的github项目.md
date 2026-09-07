@@ -23,5 +23,3 @@ agent对话[herdrdev/herdr: the runtime your coding agents live on](https://gith
 一键生课[THU-MAIC/OpenMAIC: Open Multi-Agent Interactive Classroom — Get an immersive, multi-agent learning experience in just one click](https://github.com/THU-MAIC/OpenMAIC)
 
 现成的人格[heyron-ai/agent-library: Beginner-friendly tutorials, agent personas, skills, and templates for heyron users.](https://github.com/heyron-ai/agent-library)
-
-soul.md[madhvantyagi/SOUL.md: This repo contains different Soul.md files each file is different and allow your agents to behave in unique interesting personality.](https://github.com/madhvantyagi/SOUL.md?utm_source=chatgpt.com)
