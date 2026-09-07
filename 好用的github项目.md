@@ -21,3 +21,5 @@ agent对话[herdrdev/herdr: the runtime your coding agents live on](https://gith
 专业图表绘制[tt-a1i/archify: Agent skill for beautiful, verifiable architecture, workflow, sequence, data-flow, and lifecycle diagrams—self-contained HTML with motion and crisp export.](https://github.com/tt-a1i/archify)
 
 一键生课[THU-MAIC/OpenMAIC: Open Multi-Agent Interactive Classroom — Get an immersive, multi-agent learning experience in just one click](https://github.com/THU-MAIC/OpenMAIC)
+
+现成的人格[heyron-ai/agent-library: Beginner-friendly tutorials, agent personas, skills, and templates for heyron users.](https://github.com/heyron-ai/agent-library)
