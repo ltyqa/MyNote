@@ -25,3 +25,9 @@ agent对话[herdrdev/herdr: the runtime your coding agents live on](https://gith
 角色性格编辑[SillyTavern/SillyTavern: LLM Frontend for Power Users.](https://github.com/SillyTavern/SillyTavern)
 
 人格参数配置[PersonaNexus/personanexus：使用 YAML 而非代码定义 AI 代理人格。心理学框架（OCEAN/DISC）、行为模式、情绪状态和交互协议——编译为适用于任何 LLM 的系统提示词。 --- PersonaNexus/personanexus: Define AI agent personalities in YAML, not code. Psychological frameworks (OCEAN/DISC), behavioral modes, mood states, and interaction protocols — compiled to system prompts for any LLM.](https://github.com/PersonaNexus/personanexus)
+
+手机电脑互联[thtbee/nectarlink: Your Android phone and your PC, working as one. Windows and Linux. Local-first, end-to-end encrypted, no account.](https://github.com/thtbee/nectarlink)
+
+现代化爬虫框架[D4Vinci/Scrapling: 🕷️ The BEST Web Scraping framework that handles everything from a single request to a full-scale crawl! Don't be shy, join here: https://discord.gg/EMgGbDceNQ and follow here for daily tips and tricks: https://x.com/Scrapling_dev](https://github.com/D4Vinci/Scrapling)
+
+ai视频剪辑[openfilm/openfilm: The open source AI video agent: turns any coding agent into a video agent, with editors to change anything it makes.](https://github.com/openfilm/openfilm)
